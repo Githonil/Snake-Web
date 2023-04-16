@@ -91,10 +91,6 @@ class Snake {
      */
     grow() {
         const snakePart = document.createElement("div");
-        snakePart.style.top = this.#snakeHead.style.top;
-        snakePart.style.left = this.#snakeHead.style.left;
-        snakePart.style.width = this.#snakeHead.style.width;
-        snakePart.style.height = this.#snakeHead.style.height;
         snakePart.className = "snakePart";
 
         snakePart.id = `${this.#snakeParts.length}`;
@@ -102,6 +98,8 @@ class Snake {
 
         const snake = document.getElementById("snake");
         snake.appendChild(snakePart);
+
+        this.#move();
     }
 
 
@@ -125,13 +123,20 @@ class Snake {
 
 
     /**
+     * Cette méthode fait uniquement avancer la tête du serpent.
+     */
+    #move() {
+        this.#coordX += this.#velocityX;
+        this.#coordY += this.#velocityY;
+    }
+
+
+
+    /**
      * Cette méthode fait avancer le serpent.
      */
     move() {
         this.grow();
-
-        this.#coordX += this.#velocityX;
-        this.#coordY += this.#velocityY;
 
         this.#removePart();
     }
@@ -184,6 +189,14 @@ class Snake {
     update() {
         this.#snakeHead.style.left = `${this.#coordX * this.widthSize}px`;
         this.#snakeHead.style.top = `${this.#coordY * this.heightSize}px`;
+
+        for (let i = 0; i < this.#snakeParts.length; i++) {
+            const snakePart = document.getElementById(`${i}`);
+            snakePart.style.left = `${this.#snakeParts[i][0] * this.widthSize}px`;
+            snakePart.style.top = `${this.#snakeParts[i][1] * this.heightSize}px`;
+            snakePart.style.width = this.#snakeHead.style.width;
+            snakePart.style.height = this.#snakeHead.style.height;
+        }
     }
 
 
@@ -200,6 +213,25 @@ class Snake {
                 return true;
         }
         return false;
+    }
+
+
+
+    /**
+     * Cette méthode reset le serpent.
+     */
+    reset() {
+        for (let i = 0; i < this.#snakeParts.length; i++) {
+            const snake = document.getElementById("snake");
+            let snakePart = document.getElementById(`${i}`);
+            snake.removeChild(snakePart);
+        }
+        this.#snakeParts = Array();
+
+        this.#coordX = 0;
+        this.#coordY = 0;
+        this.#velocityX = 1;
+        this.#velocityY = 0;
     }
 
 }

@@ -16,8 +16,8 @@ let running = true;
 
 
 
-let snake = new Snake(widthSize, heightSize);
-let apple = new Apple(WIDTH, HEIGHT, widthSize, heightSize);
+const snake = new Snake(widthSize, heightSize);
+const apple = new Apple(WIDTH, HEIGHT, widthSize, heightSize);
 
 
 
@@ -43,7 +43,7 @@ addEventListener("keydown", (event) => {
 
 
 /**
- * Cette méthode vérifie la colision entre la pomme et le serpent.
+ * Cette fonction vérifie la colision entre la pomme et le serpent.
  * 
  * @return Renvoie true si il y a une colision, false sinon.
  */
@@ -55,17 +55,22 @@ function collide() {
 
 
 
+/**
+ * Cette fonction vérifie si le serpent est sortie du terrain.
+ * 
+ * @param Renvoie true si le serpent est en dehors du terrain, false sinon.
+ */
+function isOut() {
+    if (snake.getCoordX() < 0 || snake.getCoordX() >= WIDTH || snake.getCoordY() < 0 ||snake.getCoordY() >= HEIGHT)
+        return true;
+    return false;
+}
+
+
+
 setInterval( () => {
-    newWidthScreen = document.getElementById("main").scrollWidth;
-    newHeightScreen = document.getElementById("main").scrollHeight;
-
-    if (newWidthScreen != widthScreen || newHeightScreen != heightScreen) {
-        apple.spawnApple(WIDTH, HEIGHT);
-        snake = new Snake(widthSize, heightSize);
-    }
-
-    widthScreen = newWidthScreen;
-    heightScreen = newHeightScreen;
+    widthScreen = document.getElementById("main").scrollWidth;
+    heightScreen = document.getElementById("main").scrollHeight;
 
     aspect = widthScreen / heightScreen;
 
@@ -95,7 +100,7 @@ setInterval( () => {
 
         snake.move();
 
-        if (snake.bit())
+        if (snake.bit() || isOut())
             running = false;
 
         snake.update();
