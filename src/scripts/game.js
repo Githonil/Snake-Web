@@ -8,9 +8,9 @@ let aspect = widthScreen / heightScreen;
 let widthSize = widthScreen / WIDTH;
 let heightSize = heightScreen / HEIGHT;
 
+
+
 let score = 0;
-
-
 
 let running = true;
 
@@ -38,7 +38,7 @@ addEventListener("keydown", (event) => {
         default:
             break;
     }
-})
+});
 
 
 
@@ -58,12 +58,26 @@ function collide() {
 /**
  * Cette fonction vérifie si le serpent est sortie du terrain.
  * 
- * @param Renvoie true si le serpent est en dehors du terrain, false sinon.
+ * @return Renvoie true si le serpent est en dehors du terrain, false sinon.
  */
 function isOut() {
     if (snake.getCoordX() < 0 || snake.getCoordX() >= WIDTH || snake.getCoordY() < 0 ||snake.getCoordY() >= HEIGHT)
         return true;
     return false;
+}
+
+
+
+/**
+ * Cette fonction reset le jeu.
+ */
+function reset() {
+    snake.reset();
+    apple.spawnApple(WIDTH, HEIGHT);
+    running = true;
+    const ending = document.getElementById("ending");
+    ending.style.display = "none";
+    score = 0;
 }
 
 
@@ -92,6 +106,7 @@ setInterval( () => {
     /** -------------------------------------------------------------------- **/
 
     if (running) {
+        
         if (collide()) {
             apple.spawnApple(WIDTH, HEIGHT);
             snake.grow();
@@ -100,10 +115,14 @@ setInterval( () => {
 
         snake.move();
 
-        if (snake.bit() || isOut())
+        if (snake.bit() || isOut()) {
             running = false;
-
-        snake.update();
-        apple.update();
+            const ending = document.getElementById("ending");
+            ending.style.display = "flex";
+        }
+        else {
+            snake.update();
+            apple.update();
+        }
     }
 }, 50);
