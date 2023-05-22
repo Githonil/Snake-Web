@@ -42,6 +42,36 @@ addEventListener("keydown", (event) => {
 
 
 
+addEventListener("mouseup", (event) => {
+    const widthPart = widthScreen / 3;
+    const heightPart = heightScreen / 3;
+
+    console.log(`widthPart : ${widthPart} ; heightPar : ${heightPart}`);
+
+    const posX = event.clientX;
+    const posY = event.clientY;
+
+    console.log(`posX : ${posX} ; posY : ${posY}`);
+
+    const isMiddleWidth = posX > widthPart && posX < widthPart * 2;
+    const isMiddleHeight = posY > heightPart && posY < heightPart * 2;
+
+    if (posX <= widthPart && isMiddleHeight) {
+        snake.goLeft();
+    }
+    else if (posX >= widthPart * 2 && isMiddleHeight) {
+        snake.goRight();
+    }
+    else if (posY <= heightPart && isMiddleWidth) {
+        snake.goUp();
+    }
+    else if (posY >= heightPart * 2 && isMiddleWidth) {
+        snake.goDown();
+    }
+});
+
+
+
 /**
  * Cette fonction vérifie la colision entre la pomme et le serpent.
  * 
