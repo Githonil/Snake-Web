@@ -1,8 +1,8 @@
 const WIDTH = 50;
 const HEIGHT = 50;
 
-let widthScreen = document.getElementById("main").scrollWidth;
-let heightScreen = document.getElementById("main").scrollHeight;
+let widthScreen = document.getElementById("main").offsetWidth;
+let heightScreen = document.getElementById("main").offsetHeight;
 let aspect = widthScreen / heightScreen;
 
 let widthSize = widthScreen / WIDTH;
@@ -13,6 +13,7 @@ let heightSize = heightScreen / HEIGHT;
 let score = 0;
 
 let running = true;
+let pause = false;
 
 
 
@@ -24,16 +25,27 @@ const apple = new Apple(WIDTH, HEIGHT, widthSize, heightSize);
 addEventListener("keydown", (event) => {
     switch (event.code) {
         case "ArrowUp":
+        case "KeyW":
             snake.goUp();
             break;
         case "ArrowDown":
+        case "KeyS":
             snake.goDown();
             break;
         case "ArrowRight":
+        case "KeyD":
             snake.goRight();
             break;
         case "ArrowLeft":
+        case "KeyA":
             snake.goLeft();
+            break;
+
+
+
+        case "Escape":
+            if (running)
+                pauseButton();
             break;
         default:
             break;
@@ -43,15 +55,14 @@ addEventListener("keydown", (event) => {
 
 
 addEventListener("mouseup", (event) => {
+    if (widthScreen > 800)
+        return;
+
     const widthPart = widthScreen / 3;
     const heightPart = heightScreen / 3;
 
-    console.log(`widthPart : ${widthPart} ; heightPar : ${heightPart}`);
-
     const posX = event.clientX;
     const posY = event.clientY;
-
-    console.log(`posX : ${posX} ; posY : ${posY}`);
 
     const isMiddleWidth = posX > widthPart && posX < widthPart * 2;
     const isMiddleHeight = posY > heightPart && posY < heightPart * 2;
@@ -112,9 +123,44 @@ function reset() {
 
 
 
+/**
+ * Cette fonction mets la pause du jeu.
+ */
+function pauseButton() {
+    if (running)
+        pause = !pause;
+}
+
+
+
+/**
+ * Cette fonction relance le jeu lors de la pause.
+ */
+function unpause() {
+    pause = false;
+}
+
+
+
+function infoGame() {
+    const pcInfo = document.getElementById("pc");
+    const anotherInfo = document.getElementById("another");
+
+    if (widthScreen > 800) {
+
+        pcInfo.className = "visible";
+        anotherInfo.className = "hidden";
+        return;
+    }
+    pcInfo.className = "hidden";
+    anotherInfo.className = "visible";
+}
+
+
+
 setInterval( () => {
-    widthScreen = document.getElementById("main").scrollWidth;
-    heightScreen = document.getElementById("main").scrollHeight;
+    widthScreen = document.getElementById("main").offsetWidth;
+    heightScreen = document.getElementById("main").offsetHeight;
 
     aspect = widthScreen / heightScreen;
 
@@ -133,9 +179,13 @@ setInterval( () => {
 
     document.getElementById("score").innerText = `${score}`;
 
+    infoGame();
+
     /** -------------------------------------------------------------------- **/
 
-    if (running) {
+    if (running && !pause) {
+        const pauseText = document.getElementById("pause");
+        pauseText.style.display = "none";
         
         if (collide()) {
             apple.spawnApple(WIDTH, HEIGHT);
@@ -154,5 +204,9 @@ setInterval( () => {
             snake.update();
             apple.update();
         }
+    }
+    else if (running && pause) {
+        const pauseText = document.getElementById("pause");
+        pauseText.style.display = "flex";
     }
 }, 50);

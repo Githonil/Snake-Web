@@ -8,6 +8,7 @@
     </head>
     <body>
         <header>
+            <button id="onpause" onclick="pauseButton()"></button>
             <h1>Score : <span id="score">0</span></h1>
         </header>
         <hr>
@@ -19,6 +20,21 @@
             <div class="hidden" id="ending">
                 <h1>Game Over!</h1>
                 <button id="reset" onclick="reset()">Reset</button>
+            </div>
+            <div class="hidden" id="pause">
+                <h1>Pause</h1>
+                <button id="unpause" onclick="unpause()">Continue</button>
+            </div>
+            <div class="info">
+                <div id="pc">
+                    <p>WASD or another according to the keyboard.</p>
+                    <p>Or use the arrow.</p>
+                    <p>Escape to lunch the pause.</p>
+                </div>
+                <div id="another">
+                    <p>Use the arrow.</p>
+                    <p>Or click on the side of the window.</p>
+                </div>
             </div>
             <div id="navButton">
                 <button onclick="snake.goUp()">↑</button>
